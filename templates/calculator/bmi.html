@@ -1,0 +1,83 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Fixed Deposit Calculator {% endblock %}
+
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">BMI Calculator</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="weight" class="form-control" placeholder="What is your weight?" required="">
+            <label for="amount">What is your weight(kg)?</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="cm" class="form-control" placeholder="How tall are you(cm)?" required="">
+            <label for="rate">How tall are you(cm)?</label>
+        </div>
+
+{#        <button class="btn btn-lg btn-primary btn-block" type="submit">CALCULATOR</button>#}
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CALCULATOR"><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="bmi"></td>
+                    <td class="bmi-value"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // upstream verify
+        $(".btn-block").click(function () {
+            var weight = $('#weight').val();
+            var cm = $('#cm').val();
+            if (weight && cm) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        weight: $("#weight").val(),
+                        cm: $("#cm").val(),
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".bmi").text(data.bmi[0]);
+                                $(".bmi-value").text(data.bmi[1]);
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

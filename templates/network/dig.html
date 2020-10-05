@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %} Dig (DNS lookup) {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Dig (DNS lookup)</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="text" id="domain" class="form-control" placeholder="Domain Name" required="">
+            <label for="domain">Domain Name</label>
+        </div>
+
+        <div class="form-label-group">
+            <select name="" id="type" class="form-control">
+                <option value="">Unspecified</option>
+                <option value="A">A</option>
+                <option value="AAAA">AAAA</option>
+                <option value="ANY">ANY</option>
+                <option value="CAA">CAA</option>
+                <option value="CNAME">CNAME</option>
+                <option value="MX">MX</option>
+                <option value="NS">NS</option>
+                <option value="SOA">SOA</option>
+                <option value="TXT">TXT</option>
+            </select>
+        </div>
+
+{#        <button class="btn btn-lg btn-primary btn-block" type="submit">CALCULATOR</button>#}
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="Dig "><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <div class="form-label-group data-value"></div>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // upstream verify
+        $(".btn-block").click(function () {
+            var domain = $('#domain').val();
+            if (domain) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        domain: $("#domain").val(),
+                        type: $("#type").val(),
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                var html = "";
+                                $(".result").text(data.msg);
+                                //$(".dig").text(data.ret[1]);
+                                for(var i=0;i<data.ret.length;i++){
+								html+="<p"+">"+data.ret[i]+"</p>"
+							}
+                                 $(".data-value").html(html)
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

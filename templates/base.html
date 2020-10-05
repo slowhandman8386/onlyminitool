@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .navbar-custom {
+            background-color: #dd5e89;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    {% load static %}
+    <link href="{% static "css/css.css" %}" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="fixed-top">
+  <div class="collapse" id="navbarToggleExternalContent">
+    <div class="bg-dark p-4">
+            <!-- Accordion -->
+            <div id="accordionExample" class="accordion shadow">
+
+                <!-- Accordion item 1 -->
+                <div class="card">
+                    <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                        <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseOne"
+                                                             aria-expanded="false" aria-controls="collapseOne"
+                                                             class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Calculate
+                            Tools</a></h6>
+                    </div>
+                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{% url "fd" %}">Fix Deposit</a></li>
+                            <li class="list-group-item"><a href="{% url "car-load" %}">Car Loan</a></li>
+                            <li class="list-group-item"><a href="{% url "home-load" %}">Home Loan</a></li>
+                            <li class="list-group-item"><a href="{% url "bmi" %}">BMI</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion item 2 -->
+            <div class="card">
+                <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                    <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseTwo"
+                                                         aria-expanded="false" aria-controls="collapseTwo"
+                                                         class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Network
+                        Tools</a></h6>
+                </div>
+                <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="{% url "checkport" %}">IP Check Port</a></li>
+                        <li class="list-group-item"><a href="{% url "dig" %}">DIG</a></li>
+                        <li class="list-group-item"><a href="{% url "ip" %}">IP Lookup</a></li>
+                        <li class="list-group-item"><a href="{% url "whois" %}">Whois</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Accordion item 3 -->
+            <div class="card">
+                <div id="headingThree" class="card-header bg-white shadow-sm border-0">
+                    <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseThree"
+                                                         aria-expanded="false" aria-controls="collapseThree"
+                                                         class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Convert
+                        Tools</a></h6>
+                </div>
+                <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="#">Coming Soon.....</a></li>
+
+                    </ul>
+                </div>
+            </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-dark bg-dark ">
+        <a class="navbar-brand" href="/">
+    <img src="{% static "img/LOGO-o.svg" %}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+    onlyminitool
+  </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+</div>
+
+{% block content %}
+
+{% endblock%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+{% block js %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Fixed Deposit Calculator {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Fixed Deposit Calculator</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="amount" class="form-control" placeholder="Deposit Amount" required="">
+            <label for="amount">Deposit Amount</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="rate" class="form-control" placeholder="Annual Interest Rate (%)" required="">
+            <label for="rate">Annual Interest Rate (%)</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="months" class="form-control" placeholder="Time Period (Months):" required="">
+            <label for="months">Time Period (Months)</label>
+        </div>
+
+
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CALCULATOR"><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="earn-name"></td>
+                    <td class="earn-value"></td>
+                </tr>
+                <tr class="tr2">
+                    <td class="amount"></td>
+                    <td class="amount-value"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // upstream verify
+        $(".btn-block").click(function () {
+            var amount = $('#amount').val();
+            var rate = $('#rate').val();
+            var months = $('#months').val();
+            if (amount && rate && months) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        amount: $("#amount").val(),
+                        rate: $("#rate").val(),
+                        months: $("#months").val(),
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".earn-name").text(data.earn[0]);
+                                $(".earn-value").text(data.earn[1]);
+                                $(".amount").text(data.total[0]);
+                                $(".amount-value").text(data.total[1]);
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

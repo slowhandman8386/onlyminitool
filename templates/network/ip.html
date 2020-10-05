@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %} IP Address Lookup {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">IP Address Lookup </h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="text" id="ip" class="form-control" placeholder="IP address" required="">
+            <label for="domain">IP address</label>
+        </div>
+
+
+{#        <button class="btn btn-lg btn-primary btn-block" type="submit">CALCULATOR</button>#}
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="Lookup"><span class="error"></span>
+        <div class="text-center mb-4">
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="ip-name"></td>
+                    <td class="ip-value"></td>
+                </tr>
+                <tr class="tr2">
+                    <td class="isp-name" id="trdel"></td>
+                    <td class="isp-value" id="tr2del"></td>
+                </tr>
+                <tr class="tr3">
+                    <td class="country-name" id="tddel"></td>
+                    <td class="country-value"id="td2del"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // upstream verify
+        $(".btn-block").click(function () {
+            var ip = $('#ip').val();
+            if (ip) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        ip: $("#ip").val(),
+                        type: $("#type").val(),
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $('#tddel').html("");
+                                $('#td2del').html("");
+                                $('#trdel').html("");
+                                $('#tr2del').html("");
+                                $(".result").text(data.msg);
+
+                                $(".ip-name").text(data.ip[0]);
+                                $(".ip-value").text(data.ip[1]);
+                                $(".isp-name").text(data.isp[0]);
+                                $(".isp-value").text(data.isp[1]);
+                                $(".country-name").text(data.country[0]);
+                                $(".country-value").text(data.country[1]);
+
+							}
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

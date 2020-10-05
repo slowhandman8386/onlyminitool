@@ -1,0 +1,67 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Whois Lookup {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Whois Lookup</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="text" id="domain" class="form-control" placeholder="Enter Domain Name or IP Address" required="">
+            <label for="domain">Enter Domain Name or IP Address</label>
+        </div>
+
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CALCULATOR"><span class="error"></span>
+
+        <div class="">
+
+            <div class="form-label-group result"></div>
+                <pre class="whois-value" style="font-size:8px"></pre>
+                <h4 class="whois-can"></h4>
+
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // verify
+        $(".btn-block").click(function () {
+            var domain= $('#domain').val();
+            if (domain) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        domain: domain,
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".whois-value").text(data.whois);
+                                $(".whois-can").text(data.whoiscan);
+                             }
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

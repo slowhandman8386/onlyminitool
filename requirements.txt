@@ -1,0 +1,5 @@
+Django==3.1.2
+numpy-financial==1.0.0
+validators==0.18.1
+IPy==1.00
+geoip2==4.1.0

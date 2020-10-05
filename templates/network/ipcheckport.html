@@ -1,0 +1,73 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Check Port Tool {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Check Port Tool</h1>
+        </div>
+        <div class="form-label-group">
+            <input type="text" id="ip" class="form-control" placeholder="IP Address" required="">
+            <label for="ip">IP Address</label>
+        </div>
+        <div class="form-label-group">
+            <input type="number" id="port" class="form-control" placeholder="Port Number" required="">
+            <label for="port">Port Number</label>
+        </div>
+
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CHECK"><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="port-result"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // verify
+        $(".btn-block").click(function () {
+            var ip = $('#ip').val();
+            var port = $('#port').val();
+            if (ip && port) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        ip: ip,
+                        port: port,
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".port-result").text(data.check);
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

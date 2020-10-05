@@ -1,0 +1,101 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Fixed Deposit Calculator {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Home Loan Calculator</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="amount" class="form-control" placeholder="Loan Amount" required="">
+            <label for="amount">Loan Amount</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="rate" class="form-control" placeholder="Annual Interest Rate (%)" required="">
+            <label for="rate">Annual Interest Rate (%)</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="year" class="form-control" placeholder="Loan Period (Years)" required="">
+            <label for="year">Loan Period (Years)</label>
+        </div>
+
+
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CALCULATOR"><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="earn-name"></td>
+                    <td class="earn-value"></td>
+                </tr>
+                <tr class="tr2">
+                    <td class="total-name"></td>
+                    <td class="total-value"></td>
+                </tr>
+                <tr class="tr2">
+                    <td class="loan-name"></td>
+                    <td class="loan-value"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        //  verify
+        $(".btn-block").click(function () {
+            var amount = $('#amount').val();
+            var rate = $('#rate').val();
+            var year = $('#year').val();
+            if (amount && rate && year) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        amount: $("#amount").val(),
+                        rate: $("#rate").val(),
+                        year: $("#year").val(),
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".earn-name").text(data.pay[0]);
+                                $(".earn-value").text(data.pay[1]);
+                                $(".total-name").text(data.total[0]);
+                                $(".total-value").text(data.total[1]);
+                                $(".loan-name").text(data.loan[0]);
+                                $(".loan-value").text(data.loan[1]);
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}

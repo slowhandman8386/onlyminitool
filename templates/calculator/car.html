@@ -1,0 +1,108 @@
+{% extends 'calculator/../base.html' %}
+{% block title %} Fixed Deposit Calculator {% endblock %}
+{% block content %}
+    <form class="form-signin">
+    {% csrf_token %}
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">CAR LOAN Calculator</h1>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="price" class="form-control" placeholder="Car Price" required="">
+            <label for="price">Car Price</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="down-payment" class="form-control" placeholder="Down Payment" required="">
+            <label for="down-payment">Down Payment</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="rate" class="form-control" placeholder="Annual Interest Rate (%)" required="">
+            <label for="rate">Annual Interest Rate (%)</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="number" id="years" class="form-control" placeholder="Loan Period (Years)" required="">
+            <label for="years">Loan Period (Years)</label>
+        </div>
+
+
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="CALCULATOR"><span class="error"></span>
+
+        <div class="text-center mb-4">
+
+            <div class="form-label-group result"></div>
+            <table class="table">
+                <tbody>
+                <tr class="tr1">
+                    <td width="30%" class="earn-name"></td>
+                    <td class="earn-value"></td>
+                </tr>
+                <tr class="tr2">
+                    <td class="amount"></td>
+                    <td class="amount-value"></td>
+                </tr>
+                <tr class="tr3">
+                    <td class="load"></td>
+                    <td class="load-value"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {#    <p class="mt-5 mb-3 text-muted text-center">© 2017-2020</p>#}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // verify
+        $(".btn-block").click(function () {
+            var price = $('#price').val();
+            var payment= $('#down-payment').val();
+            var rate = $('#rate').val();
+            var years = $('#years').val();
+            if (price && rate && payment && years) {
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    data: {
+                        price: price,
+                        payment: payment,
+                        rate: rate,
+                        years: years,
+
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.status) {
+                            if (location.search) {
+                                location.href = location.search.slice(6)
+                            } else {
+                                $(".result").text(data.msg);
+                                $(".earn-name").text(data.pay[0]);
+                                $(".earn-value").text(data.pay[1]);
+                                $(".amount").text(data.total[0]);
+                                $(".amount-value").text(data.total[1]);
+                                $(".load").text(data.load[0]);
+                                $(".load-value").text(data.load[1]);
+                            }
+
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"});
+
+
+                        }
+                    }
+                })
+            } else {
+                alert("Please enter number!");
+                return false;
+            }
+
+        });
+    </script>
+{% endblock %}
