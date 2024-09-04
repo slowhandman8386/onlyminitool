@@ -1,4 +1,4 @@
-Django==3.1.2
+Django==3.2.25
 numpy-financial==1.0.0
 validators==0.18.1
 IPy==1.00
